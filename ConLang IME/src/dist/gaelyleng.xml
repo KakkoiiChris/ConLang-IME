@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language name="Gaelyleng" font="Segoe UI">
+	<map>
+		<set key="A-" val="Ā"/>
+		<set key="a-" val="ā"/>
+		<set key="AE" val="Æ"/>
+		<set key="Ae" val="Æ"/>
+		<set key="ae" val="æ"/>
+		<set key="Æ-" val="Ǣ"/>
+		<set key="æ-" val="ǣ"/>
+		<set key="E-" val="Ē"/>
+		<set key="e-" val="ē"/>
+		<set key="I-" val="Ī"/>
+		<set key="i-" val="ī"/>
+		<set key="O-" val="Ō"/>
+		<set key="o-" val="ō"/>
+		<set key="OE" val="Œ"/>
+		<set key="Oe" val="Œ"/>
+		<set key="oe" val="œ"/>
+		<set key="Œ-" val="Œ̄"/>
+		<set key="œ-" val="œ̄"/>
+		<set key="U-" val="Ū"/>
+		<set key="u-" val="ū"/>
+		<set key="DH" val="Ð"/>
+		<set key="Dh" val="Ð"/>
+		<set key="dh" val="ð"/>
+		<set key="TH" val="Þ"/>
+		<set key="Th" val="Þ"/>
+		<set key="th" val="þ"/>
+		<set key="NG" val="Ŋ"/>
+		<set key="Ng" val="Ŋ"/>
+		<set key="ng" val="ŋ"/>
+		<set key="W"  val="Ƿ"/>
+		<set key="w"  val="ƿ"/>
+		<set key="ss" val="ʃ"/>
+		<set key="GH" val="Ʒ"/>
+		<set key="Gh" val="Ʒ"/>
+		<set key="gh" val="ʒ"/>
+	</map>
+</language>
