@@ -10,10 +10,10 @@
  ****************************************************************/
 package net.alexanderdev.clime.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -28,11 +28,12 @@ import javax.swing.JFrame;
 public class IME extends JFrame {
 	private static final long serialVersionUID = 6961165635772608059L;
 
-	public static final String TITLE   = "ConLang IME";
+	public static final String TITLE = "ConLang IME";
 	public static final String VERSION = "v1.0 alpha";
 
 	private FileBar fileBar;
 	private Editor editor;
+	private StatusBar statusBar;
 
 	private Dimension previousSize;
 
@@ -41,8 +42,13 @@ public class IME extends JFrame {
 	public IME() {
 		super(String.format("%s %s: [untitled]", TITLE, VERSION));
 
-		editor = new Editor(this);
-		add(editor);
+		setLayout(new BorderLayout());
+
+		statusBar = new StatusBar();
+		add(statusBar, BorderLayout.SOUTH);
+
+		editor = new Editor(this, statusBar);
+		add(editor, BorderLayout.CENTER);
 
 		fileBar = new FileBar(this, editor);
 		setJMenuBar(fileBar);
@@ -50,7 +56,7 @@ public class IME extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				Toolkit.getDefaultToolkit().beep();
+				// Toolkit.getDefaultToolkit().beep();
 			}
 		});
 

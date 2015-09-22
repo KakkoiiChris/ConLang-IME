@@ -32,10 +32,7 @@ public class FileBar extends JMenuBar {
 
 	private JCheckBoxMenuItem fullscreen;
 	private JMenu show;
-	private JCheckBoxMenuItem style;
-
-	private JMenu language;
-	private JMenuItem createLang, importLang;
+	private JCheckBoxMenuItem style, lang;
 
 	public FileBar(IME ime, Editor editor) {
 		file = new JMenu("File");
@@ -95,7 +92,15 @@ public class FileBar extends JMenuBar {
 		style.addActionListener(e -> {
 			editor.getStyleMenu().showDialog(style.isSelected());
 		});
+		style.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_DOWN_MASK, false));
 		show.add(style);
+
+		lang = new JCheckBoxMenuItem("Language");
+		lang.addActionListener(e -> {
+			editor.getLangMenu().showDialog(lang.isSelected());
+		});
+		lang.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.ALT_DOWN_MASK, false));
+		show.add(lang);
 
 		view.add(show);
 

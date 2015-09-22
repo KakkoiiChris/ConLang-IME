@@ -34,13 +34,22 @@ public class Editor extends JTabbedPane {
 
 	private StyleDialog styleMenu = new StyleDialog(this);
 
-	private IME ime;
+	private LanguageDialog langMenu = new LanguageDialog(this);
 
-	public Editor(IME ime) {
+	private IME ime;
+	
+	private StatusBar statusBar;
+
+	public Editor(IME ime, StatusBar statusBar) {
 		super(SwingConstants.TOP, SCROLL_TAB_LAYOUT);
 		setPreferredSize(new Dimension(800, 600));
 		addBlankTab();
 		this.ime = ime;
+		this.statusBar=statusBar;
+	}
+	
+	public void update(String text) {
+		statusBar.update(text);
 	}
 
 	public EditorTab getCurrentTab() {
@@ -72,7 +81,7 @@ public class Editor extends JTabbedPane {
 	}
 
 	public void addBlankTab() {
-		addTab("untitled", new EditorTab());
+		addTab("untitled", new EditorTab(this));
 	}
 
 	public void addFilledTab(String title, String[] text) {
@@ -81,6 +90,10 @@ public class Editor extends JTabbedPane {
 
 	public StyleDialog getStyleMenu() {
 		return styleMenu;
+	}
+
+	public LanguageDialog getLangMenu() {
+		return langMenu;
 	}
 
 	public JFrame getFrame() {

@@ -35,6 +35,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import net.alexanderdev.clime.util.Language;
 import net.alexanderdev.clime.util.XMLIO;
 
 /**
@@ -48,33 +49,13 @@ public class EditorTab extends JTextPane {
 
 	private Map<String, String> langMap = new HashMap<>();
 
-	private int maxReplaceSize;
+	private int replaceSize;
 
-	public EditorTab() {
+	public EditorTab(Editor editor) {
 		setDocument(new DefaultStyledDocument());
-		setFont(new Font("Thaeonian", Font.PLAIN, 40));
 
-		langMap.put("AA", "Ā");
-		langMap.put("aa", "ā");
-		langMap.put("EE", "Ē");
-		langMap.put("ee", "ē");
-		langMap.put("II", "Ī");
-		langMap.put("ii", "ī");
-		langMap.put("OO", "Ō");
-		langMap.put("oo", "ō");
-		langMap.put("UU", "Ū");
-		langMap.put("uu", "ū");
-		langMap.put("YY", "Ȳ");
-		langMap.put("yy", "ȳ");
-		langMap.put("Sh", "X");
-		langMap.put("sh", "x");
-		langMap.put("Zh", "Ź");
-		langMap.put("zh", "ź");
-		langMap.put("Th", "Θ");
-		langMap.put("th", "θ");
-		langMap.put("Yi", "Ŷ");
-		langMap.put("yi", "ŷ");
-		maxReplaceSize = 2;
+		Font f = getFont();
+		setFont(new Font(f.getFontName(), f.getStyle(), 20));
 
 		addKeyListener(new KeyAdapter() {
 			@Override
@@ -84,8 +65,8 @@ public class EditorTab extends JTextPane {
 						System.exit(0);
 						break;
 					default:
-						if (getText().length() >= maxReplaceSize)
-							replace();
+						replace();
+						editor.update(getText());
 						break;
 				}
 			}
@@ -146,64 +127,34 @@ public class EditorTab extends JTextPane {
 		doc.setCharacterAttributes(start, end - start, style, false);
 	}
 
-	public void setLanguage(String name) {
-		try {
-			Document doc = XMLIO.read("C:\\Program Files\\CLIME\\langs\\" + name + ".xml", false);
-
-			langMap.clear();
-
-			Element lang = doc.getDocumentElement();
-
-			langName = lang.getAttribute("name");
-
-			Font f = getFont();
-
-			setFont(new Font(lang.getAttribute("font"), f.getStyle(), f.getSize()));
-
-			Element map = (Element) lang.getElementsByTagName("map").item(0);
-
-			NodeList sets = map.getElementsByTagName("set");
-
-			int max = 1;
-
-			for (int i = 0; i < sets.getLength(); i++) {
-				Element set = (Element) sets.item(i);
-
-				String key = set.getAttribute("key");
-				String val = set.getAttribute("val");
-				langMap.put(key, val);
-
-				if (key.length() > max)
-					max = key.length();
-			}
-
-			maxReplaceSize = max;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void setLanguage(Language language) {
+		this.langName = language.getName();
+		this.langMap = language.getLangMap();
+		this.replaceSize = language.getReplaceSize();
+		
+		Font f = getFont();
+		setFont(new Font(language.getFontName(), f.getStyle(), f.getSize()));
 	}
 
 	private void replace() {
 		String text = getText();
 
-		for (int i = 0; i < text.length() - maxReplaceSize + 1; i++) {
-			for (int j = 1; j <= maxReplaceSize; j++) {
-				int prevCaretPos = getCaretPosition();
-				int prevTextLen = text.length();
+		for (int j = 1; j <= replaceSize; j++) {
+			int prevCaretPos = getCaretPosition();
+			int prevTextLen = text.length();
 
-				try {
-					String seq = text.substring(i, i + j);
-					String rep;
+			try {
+				String seq = text.substring(prevCaretPos - j, prevCaretPos);
+				String rep = langMap.get(seq);
 
-					if ((rep = langMap.get(seq)) != null) {
-						text = text.substring(0, i) + rep + text.substring(i + j);
+				if (rep != null) {
+					text = text.substring(0, prevCaretPos - j) + rep + text.substring(prevCaretPos);
 
-						int displace = prevTextLen - text.length();
+					int displace = prevTextLen - text.length();
 
-						setCaretPosition(prevCaretPos - displace);
-					}
-				} catch (Exception e) {
+					setCaretPosition(prevCaretPos - displace);
 				}
+			} catch (Exception e) {
 			}
 		}
 
