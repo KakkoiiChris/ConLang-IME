@@ -32,11 +32,10 @@ public class XMLIO {
 
 		Document xml;
 
-		if (rel) {
+		if (rel)
 			xml = builder.parse(XMLIO.class.getResourceAsStream(loc));
-		} else {
+		else
 			xml = builder.parse(new File(loc));
-		}
 
 		xml.normalize();
 

@@ -77,9 +77,8 @@ public class StyleDialog extends JDialog {
 				color = Color.BLACK;
 				style = NONE;
 
-				for (JCheckBox style : styles) {
+				for (JCheckBox style : styles)
 					style.setSelected(false);
-				}
 			}
 		});
 

@@ -22,7 +22,7 @@ public class Main {
 		Splash s = new Splash();
 
 		try {
-			Thread.sleep(4000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -39,7 +39,7 @@ public class Splash extends JFrame {
 	private static final long serialVersionUID = 8696402497315910914L;
 
 	public Splash() {
-		super(IME.TITLE);
+		super();
 		
 		try {
 			setLookAndFeel(getSystemLookAndFeelClassName());

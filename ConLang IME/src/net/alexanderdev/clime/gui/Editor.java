@@ -37,7 +37,7 @@ public class Editor extends JTabbedPane {
 	private LanguageDialog langMenu = new LanguageDialog(this);
 
 	private IME ime;
-	
+
 	private StatusBar statusBar;
 
 	public Editor(IME ime, StatusBar statusBar) {
@@ -45,11 +45,11 @@ public class Editor extends JTabbedPane {
 		setPreferredSize(new Dimension(800, 600));
 		addBlankTab();
 		this.ime = ime;
-		this.statusBar=statusBar;
+		this.statusBar = statusBar;
 	}
-	
-	public void update(String text) {
-		statusBar.update(text);
+
+	public void update(String text, boolean useIME) {
+		statusBar.update(text, useIME);
 	}
 
 	public EditorTab getCurrentTab() {
@@ -119,9 +119,7 @@ public class Editor extends JTabbedPane {
 			button.setRolloverIcon(new ImageIcon(getClass().getResource("/img/closeR.png")));
 			button.setPressedIcon(new ImageIcon(getClass().getResource("/img/closeP.png")));
 			button.setMargin(new Insets(0, 0, 0, 0));
-			button.addActionListener(e -> {
-				pane.remove(tab.getParent().getParent());
-			});
+			button.addActionListener(e -> pane.remove(tab.getParent().getParent()));
 			add(button);
 		}
 

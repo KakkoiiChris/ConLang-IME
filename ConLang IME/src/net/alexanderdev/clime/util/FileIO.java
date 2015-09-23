@@ -45,9 +45,8 @@ public class FileIO {
 		String line;
 
 		try {
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null)
 				lines.add(line);
-			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -84,9 +83,8 @@ public class FileIO {
 		String line;
 
 		try {
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null)
 				lines.add(line);
-			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {

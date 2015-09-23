@@ -10,12 +10,7 @@
  ****************************************************************/
 package net.alexanderdev.clime.gui;
 
-import static net.alexanderdev.clime.gui.StyleDialog.BOLD;
-import static net.alexanderdev.clime.gui.StyleDialog.ITALIC;
-import static net.alexanderdev.clime.gui.StyleDialog.STRIKE;
-import static net.alexanderdev.clime.gui.StyleDialog.SUB;
-import static net.alexanderdev.clime.gui.StyleDialog.SUPER;
-import static net.alexanderdev.clime.gui.StyleDialog.UNDER;
+import static net.alexanderdev.clime.gui.StyleDialog.*;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,12 +26,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import net.alexanderdev.clime.util.Language;
-import net.alexanderdev.clime.util.XMLIO;
 
 /**
  * @author Christian Bryce Alexander
@@ -51,7 +41,13 @@ public class EditorTab extends JTextPane {
 
 	private int replaceSize;
 
+	private boolean useIME = true;
+
+	private Editor editor;
+
 	public EditorTab(Editor editor) {
+		this.editor = editor;
+
 		setDocument(new DefaultStyledDocument());
 
 		Font f = getFont();
@@ -60,14 +56,13 @@ public class EditorTab extends JTextPane {
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				switch (e.getKeyCode()) {
-					case KeyEvent.VK_ESCAPE:
+				if (useIME && !modified(e)) {
+					if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 						System.exit(0);
-						break;
-					default:
+					} else if (isPrintable(e.getKeyCode())) {
 						replace();
-						editor.update(getText());
-						break;
+						editor.update(getText(), useIME);
+					}
 				}
 			}
 		});
@@ -82,6 +77,23 @@ public class EditorTab extends JTextPane {
 			setText(getText() + line + "\n");
 	}
 
+	private boolean isPrintable(int keycode) {
+		return !(keycode == KeyEvent.VK_LEFT || keycode == KeyEvent.VK_RIGHT || keycode == KeyEvent.VK_UP
+			|| keycode == KeyEvent.VK_DOWN || keycode == KeyEvent.VK_ENTER || keycode == KeyEvent.VK_TAB
+			|| keycode == KeyEvent.VK_CAPS_LOCK || keycode == KeyEvent.VK_DELETE || keycode == KeyEvent.VK_BACK_SPACE
+			|| keycode == KeyEvent.VK_ENTER || keycode == KeyEvent.VK_SHIFT || keycode == KeyEvent.VK_CONTROL
+			|| keycode == KeyEvent.VK_ALT || keycode == KeyEvent.VK_ALT_GRAPH || keycode == KeyEvent.VK_F1
+			|| keycode == KeyEvent.VK_F2 || keycode == KeyEvent.VK_F3 || keycode == KeyEvent.VK_F4
+			|| keycode == KeyEvent.VK_F5 || keycode == KeyEvent.VK_F6 || keycode == KeyEvent.VK_F7
+			|| keycode == KeyEvent.VK_F8 || keycode == KeyEvent.VK_F9 || keycode == KeyEvent.VK_F10
+			|| keycode == KeyEvent.VK_F11 || keycode == KeyEvent.VK_F12 || keycode == KeyEvent.VK_HOME
+			|| keycode == KeyEvent.VK_END || keycode == KeyEvent.VK_PAGE_UP || keycode == KeyEvent.VK_PAGE_DOWN);
+	}
+
+	private boolean modified(KeyEvent e) {
+		return e.isControlDown() || e.isAltDown() || e.isAltGraphDown() || e.isMetaDown() || e.isShiftDown();
+	}
+
 	@Override
 	public boolean getScrollableTracksViewportWidth() {
 		return (getSize().width < getParent().getSize().width);
@@ -89,9 +101,8 @@ public class EditorTab extends JTextPane {
 
 	@Override
 	public void setSize(Dimension d) {
-		if (d.width < getParent().getSize().width) {
+		if (d.width < getParent().getSize().width)
 			d.width = getParent().getSize().width;
-		}
 
 		super.setSize(d);
 	}
@@ -102,9 +113,8 @@ public class EditorTab extends JTextPane {
 		int start = getSelectionStart();
 		int end = getSelectionEnd();
 
-		if (start == end) {
+		if (start == end)
 			return;
-		}
 
 		if (start > end) {
 			int life = start;
@@ -131,9 +141,14 @@ public class EditorTab extends JTextPane {
 		this.langName = language.getName();
 		this.langMap = language.getLangMap();
 		this.replaceSize = language.getReplaceSize();
-		
+
 		Font f = getFont();
 		setFont(new Font(language.getFontName(), f.getStyle(), f.getSize()));
+	}
+
+	public void enableIME(boolean enable) {
+		useIME = enable;
+		editor.update(getText(), useIME);
 	}
 
 	private void replace() {

@@ -17,6 +17,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
@@ -32,7 +33,7 @@ public class FileBar extends JMenuBar {
 
 	private JCheckBoxMenuItem fullscreen;
 	private JMenu show;
-	private JCheckBoxMenuItem style, lang;
+	private JCheckBoxMenuItem style, lang, useIME;
 
 	public FileBar(IME ime, Editor editor) {
 		file = new JMenu("File");
@@ -67,6 +68,16 @@ public class FileBar extends JMenuBar {
 		quit = new JMenuItem("Quit");
 		quit.addActionListener(e -> {
 			Toolkit.getDefaultToolkit().beep();
+			int choice = JOptionPane.showConfirmDialog(null, "You have unsaved documents. Save changes?", "",
+				JOptionPane.YES_NO_CANCEL_OPTION);
+			switch (choice) {
+				case JOptionPane.YES_OPTION:
+					break;
+				case JOptionPane.NO_OPTION:
+					break;
+				case JOptionPane.CANCEL_OPTION:
+					break;
+			}
 			System.exit(0);
 		});
 		quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false));
@@ -107,6 +118,15 @@ public class FileBar extends JMenuBar {
 		add(view);
 
 		options = new JMenu("Options");
+		
+		useIME = new JCheckBoxMenuItem("Use IME");
+		useIME.addActionListener(e -> {
+			editor.getCurrentTab().enableIME(useIME.isSelected());
+		});
+		useIME.setSelected(true);
+		useIME.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0, false));
+		options.add(useIME);
+		
 		add(options);
 	}
 }
