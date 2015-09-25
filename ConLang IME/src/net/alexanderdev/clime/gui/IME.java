@@ -29,7 +29,7 @@ public class IME extends JFrame {
 	private static final long serialVersionUID = 6961165635772608059L;
 
 	public static final String TITLE = "ConLang IME";
-	public static final String VERSION = "v1.1 alpha";
+	public static final String VERSION = "v1.2 alpha";
 
 	private FileBar fileBar;
 	private Editor editor;

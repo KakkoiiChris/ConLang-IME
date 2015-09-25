@@ -14,6 +14,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -34,16 +36,17 @@ public class Editor extends JTabbedPane {
 
 	private StyleDialog styleMenu = new StyleDialog(this);
 
-	private LanguageDialog langMenu = new LanguageDialog(this);
-
 	private IME ime;
 
 	private StatusBar statusBar;
 
 	public Editor(IME ime, StatusBar statusBar) {
 		super(SwingConstants.TOP, SCROLL_TAB_LAYOUT);
+
 		setPreferredSize(new Dimension(800, 600));
+
 		addBlankTab();
+
 		this.ime = ime;
 		this.statusBar = statusBar;
 	}
@@ -58,6 +61,15 @@ public class Editor extends JTabbedPane {
 		} catch (IndexOutOfBoundsException e) {
 			return null;
 		}
+	}
+
+	public EditorTab[] getAllTabs() {
+		List<EditorTab> tabs = new ArrayList<>();
+
+		for (int i = 0; i < getTabCount(); i++)
+			tabs.add((EditorTab) ((CloseButtonTab) getTabComponentAt(i)).getComponent());
+
+		return tabs.toArray(new EditorTab[tabs.size()]);
 	}
 
 	@Override
@@ -90,10 +102,6 @@ public class Editor extends JTabbedPane {
 
 	public StyleDialog getStyleMenu() {
 		return styleMenu;
-	}
-
-	public LanguageDialog getLangMenu() {
-		return langMenu;
 	}
 
 	public JFrame getFrame() {

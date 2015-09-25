@@ -19,13 +19,21 @@ import java.util.Map;
 public class Language {
 	private String name;
 	private String fontName;
+	
+	private int fontSize;
+	
 	private Map<String, String> langMap;
+	private Map<String, String> escapes;
+	
 	private int replaceSize;
 
-	public Language(String name, String fontName, Map<String, String> langMap, int replaceSize) {
-		this.name = name;
-		this.fontName = fontName;
-		this.langMap = langMap;
+	public Language(String name, String fontName, int fontSize, Map<String, String> langMap, Map<String, String> escapes,
+		int replaceSize) {
+		this.name        = name;
+		this.fontName    = fontName;
+		this.fontSize    = fontSize;
+		this.langMap     = langMap;
+		this.escapes     = escapes;
 		this.replaceSize = replaceSize;
 	}
 
@@ -36,9 +44,17 @@ public class Language {
 	public String getFontName() {
 		return fontName;
 	}
-
+	
+	public int getFontSize() {
+		return fontSize;
+	}
+	
 	public Map<String, String> getLangMap() {
 		return langMap;
+	}
+
+	public Map<String, String> getEscapes() {
+		return escapes;
 	}
 
 	public int getReplaceSize() {
