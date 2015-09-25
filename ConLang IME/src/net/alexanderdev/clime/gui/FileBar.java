@@ -33,23 +33,18 @@ public class FileBar extends JMenuBar {
 
 	private JCheckBoxMenuItem fullscreen;
 	private JMenu show;
-	private JCheckBoxMenuItem style, lang, useIME;
+	private JCheckBoxMenuItem style, useIME;
 
 	public FileBar(IME ime, Editor editor) {
 		file = new JMenu("File");
 
 		newFile = new JMenuItem("New");
-		newFile.addActionListener(e -> {
-			editor.addBlankTab();
-		});
+		newFile.addActionListener(e -> editor.addBlankTab());
 		newFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK, false));
 		file.add(newFile);
 
 		openFile = new JMenuItem("Open");
-		openFile.addActionListener(e -> {
-			String[] text = FileDialog.openFile();
-			editor.addFilledTab("opened", text);
-		});
+		openFile.addActionListener(e -> editor.addFilledTab("opened", FileDialog.openFile()));
 		openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK, false));
 		file.add(openFile);
 
@@ -72,13 +67,17 @@ public class FileBar extends JMenuBar {
 				JOptionPane.YES_NO_CANCEL_OPTION);
 			switch (choice) {
 				case JOptionPane.YES_OPTION:
+					for (EditorTab tab : editor.getAllTabs())
+						FileDialog.saveFile(tab.getText());
+
+					System.exit(0);
 					break;
 				case JOptionPane.NO_OPTION:
+					System.exit(0);
 					break;
 				case JOptionPane.CANCEL_OPTION:
 					break;
 			}
-			System.exit(0);
 		});
 		quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false));
 		file.add(quit);
@@ -91,42 +90,31 @@ public class FileBar extends JMenuBar {
 		view = new JMenu("View");
 
 		fullscreen = new JCheckBoxMenuItem("Fullscreen");
-		fullscreen.addItemListener(e -> {
-			ime.toggleFullscreen(fullscreen.isSelected());
-		});
+		fullscreen.addItemListener(e -> ime.toggleFullscreen(fullscreen.isSelected()));
 		fullscreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0, false));
 		view.add(fullscreen);
 
 		show = new JMenu("Show View");
 
 		style = new JCheckBoxMenuItem("Style");
-		style.addActionListener(e -> {
-			editor.getStyleMenu().showDialog(style.isSelected());
-		});
+		style.addActionListener(e -> editor.getStyleMenu().showDialog(style.isSelected()));
 		style.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_DOWN_MASK, false));
 		show.add(style);
-
-		lang = new JCheckBoxMenuItem("Language");
-		lang.addActionListener(e -> {
-			editor.getLangMenu().showDialog(lang.isSelected());
-		});
-		lang.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.ALT_DOWN_MASK, false));
-		show.add(lang);
 
 		view.add(show);
 
 		add(view);
 
 		options = new JMenu("Options");
-		
+
+		options.add(new LanguageMenu(editor));
+
 		useIME = new JCheckBoxMenuItem("Use IME");
-		useIME.addActionListener(e -> {
-			editor.getCurrentTab().enableIME(useIME.isSelected());
-		});
+		useIME.addActionListener(e -> editor.getCurrentTab().enableIME(useIME.isSelected()));
 		useIME.setSelected(true);
-		useIME.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0, false));
+		useIME.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0, false));
 		options.add(useIME);
-		
+
 		add(options);
 	}
 }

@@ -24,4 +24,8 @@ public class FileSystem {
 		if (!LANGS.exists())
 			System.out.println("Languages Directory Created: " + LANGS.mkdirs());
 	}
+	
+	public static void initPortable() {
+		
+	}
 }

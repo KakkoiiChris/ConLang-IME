@@ -38,6 +38,7 @@ public class EditorTab extends JTextPane {
 	public String langName;
 
 	private Map<String, String> langMap = new HashMap<>();
+	private Map<String, String> escapes = new HashMap<>();
 
 	private int replaceSize;
 
@@ -56,14 +57,14 @@ public class EditorTab extends JTextPane {
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (useIME && !modified(e)) {
-					if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-						System.exit(0);
-					} else if (isPrintable(e.getKeyCode())) {
+				editor.update(getText(), useIME);
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (useIME)
+					if (isPrintable(e.getKeyCode()))
 						replace();
-						editor.update(getText(), useIME);
-					}
-				}
 			}
 		});
 
@@ -127,6 +128,7 @@ public class EditorTab extends JTextPane {
 		StyleConstants.setFontFamily(style, font);
 		StyleConstants.setFontSize(style, size);
 		StyleConstants.setForeground(style, color);
+
 		StyleConstants.setBold(style, (styles & BOLD) == BOLD);
 		StyleConstants.setItalic(style, (styles & ITALIC) == ITALIC);
 		StyleConstants.setUnderline(style, (styles & UNDER) == UNDER);
@@ -140,10 +142,11 @@ public class EditorTab extends JTextPane {
 	public void setLanguage(Language language) {
 		this.langName = language.getName();
 		this.langMap = language.getLangMap();
+		this.escapes = language.getEscapes();
 		this.replaceSize = language.getReplaceSize();
 
 		Font f = getFont();
-		setFont(new Font(language.getFontName(), f.getStyle(), f.getSize()));
+		setFont(new Font(language.getFontName(), f.getStyle(), language.getFontSize()));
 	}
 
 	public void enableIME(boolean enable) {
@@ -153,6 +156,27 @@ public class EditorTab extends JTextPane {
 
 	private void replace() {
 		String text = getText();
+
+		for (int j = 2; j <= replaceSize + 1; j++) {
+			int prevCaretPos = getCaretPosition();
+			int prevTextLen = text.length();
+
+			try {
+				String seq = text.substring(prevCaretPos - j, prevCaretPos);
+				String rep = escapes.get(seq);
+
+				if (rep != null) {
+					text = text.substring(0, prevCaretPos - j) + rep + text.substring(prevCaretPos);
+
+					int displace = prevTextLen - text.length();
+					setText(text);
+					setCaretPosition(prevCaretPos - displace);
+
+					return;
+				}
+			} catch (Exception e) {
+			}
+		}
 
 		for (int j = 1; j <= replaceSize; j++) {
 			int prevCaretPos = getCaretPosition();
@@ -166,17 +190,13 @@ public class EditorTab extends JTextPane {
 					text = text.substring(0, prevCaretPos - j) + rep + text.substring(prevCaretPos);
 
 					int displace = prevTextLen - text.length();
-
+					setText(text);
 					setCaretPosition(prevCaretPos - displace);
+
+					return;
 				}
 			} catch (Exception e) {
 			}
 		}
-
-		int caretPos = getCaretPosition();
-
-		setText(text);
-
-		setCaretPosition(caretPos);
 	}
 }
