@@ -10,7 +10,7 @@
  ****************************************************************/
 package net.alexanderdev.clime.gui;
 
-import static javax.swing.UIManager.getSystemLookAndFeelClassName;
+import static javax.swing.UIManager.getCrossPlatformLookAndFeelClassName;
 import static javax.swing.UIManager.setLookAndFeel;
 
 import java.awt.BorderLayout;
@@ -28,6 +28,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import net.alexanderdev.clime.util.FileSystem;
 
@@ -40,12 +41,65 @@ public class Splash extends JFrame {
 
 	public Splash() {
 		super();
-		
+
 		try {
-			setLookAndFeel(getSystemLookAndFeelClassName());
-		} catch (Exception e) {
+			setLookAndFeel(getCrossPlatformLookAndFeelClassName());
+			//setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		final Color FORE_A  = Color.WHITE;
+		final Color BACK_A  = new Color(0x91008d);
+		final Color BACK_AS = BACK_A.darker();
+		final Color FORE_B  = Color.BLACK;
+		final Color BACK_B  = new Color(0xffb700);
+		final Color ACCEL   = new Color(0xdddddd);
+		final Color ACC_A   = new Color(0x888888);
+		final Color ACC_B   = new Color(0xffaafd);
+
+		UIManager.put("MenuBar.foreground",                                 FORE_A);
+		UIManager.put("MenuBar.background",                                 BACK_A);
+		UIManager.put("MenuBar.opaque",                                     true);
+		UIManager.put("Menu.foreground",                                    FORE_A);
+		UIManager.put("Menu.background",                                    BACK_A);
+		UIManager.put("Menu.selectionForeground",                           FORE_A);
+		UIManager.put("Menu.selectionBackground",                           BACK_AS);
+		UIManager.put("Menu.opaque",                                        true);
+		UIManager.put("MenuItem.foreground",                                FORE_A);
+		UIManager.put("MenuItem.background",                                BACK_A);
+		UIManager.put("MenuItem.selectionForeground",                       FORE_A);
+		UIManager.put("MenuItem.selectionBackground",                       BACK_AS);
+		UIManager.put("MenuItem.acceleratorForeground",                     ACCEL);
+		UIManager.put("MenuItem.acceleratorSelectionForeground",            ACCEL);
+		UIManager.put("MenuItem.opaque",                                    true);
+		UIManager.put("CheckBoxMenuItem.foreground",                        FORE_A);
+		UIManager.put("CheckBoxMenuItem.background",                        BACK_A);
+		UIManager.put("CheckBoxMenuItem.selectionForeground",               FORE_A);
+		UIManager.put("CheckBoxMenuItem.selectionBackground",               BACK_AS);
+		UIManager.put("CheckBoxMenuItem.acceleratorForeground",             ACCEL);
+		UIManager.put("CheckBoxMenuItem.acceleratorSelectionForeground",    ACCEL);
+		UIManager.put("CheckBoxMenuItem.opaque",                            true);
+		UIManager.put("RadioButtonMenuItem.foreground",                     FORE_A);
+		UIManager.put("RadioButtonMenuItem.background",                     BACK_A);
+		UIManager.put("RadioButtonMenuItem.selectionForeground",            FORE_A);
+		UIManager.put("RadioButtonMenuItem.selectionBackground",            BACK_AS);
+		UIManager.put("RadioButtonMenuItem.acceleratorForeground",          ACCEL);
+		UIManager.put("RadioButtonMenuItem.acceleratorSelectionForeground", ACCEL);
+		UIManager.put("RadioButtonMenuItem.opaque",                         true);
+		UIManager.put("Button.foreground",                                  FORE_A);
+		UIManager.put("Button.background",                                  BACK_A);
+		UIManager.put("Button.select",                                      BACK_AS);
+		UIManager.put("Label.foreground",                                   FORE_B);
+		UIManager.put("Label.background",                                   BACK_B);
+		UIManager.put("Label.opaque",                                       true);
+		UIManager.put("TabbedPane.foreground",                              FORE_B);
+		UIManager.put("TabbedPane.background",                              BACK_B);
+		UIManager.put("TabbedPane.opaque",                                  false);
+		UIManager.put("Table.selectionBackground",                          ACC_B);
+		UIManager.put("TableHeader.foreground",                             FORE_A);
+		UIManager.put("TableHeader.background",                             ACC_A);
 
 		FileSystem.init();
 
@@ -53,7 +107,8 @@ public class Splash extends JFrame {
 
 		try {
 			icon = ImageIO.read(getClass().getResourceAsStream("/img/icon.png"));
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -71,7 +126,8 @@ public class Splash extends JFrame {
 
 		try {
 			logo = ImageIO.read(getClass().getResourceAsStream("/img/logo.png"));
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -121,7 +177,7 @@ public class Splash extends JFrame {
 			g2.setColor(Color.WHITE);
 			g2.drawString(version, 10, 390);
 
-			zoom += (1f - zoom) * 0.005f;
+			zoom += (1f - zoom) * 0.01f;
 
 			repaint();
 		}

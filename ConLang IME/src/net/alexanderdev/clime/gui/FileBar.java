@@ -21,6 +21,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
+import net.alexanderdev.clime.gui.lang.LanguageMenu;
+
 /**
  * @author Christian Bryce Alexander
  * @since Jul 19, 2015, 7:52:28 PM
@@ -28,27 +30,24 @@ import javax.swing.KeyStroke;
 public class FileBar extends JMenuBar {
 	private static final long serialVersionUID = -7517657275793776841L;
 
-	private JMenu file, edit, view, options;
-	private JMenuItem newFile, openFile, saveFile, quit;
-
-	private JCheckBoxMenuItem fullscreen;
-	private JMenu show;
-	private JCheckBoxMenuItem style, useIME;
+	private JMenu file, edit, view, options, help, show;
+	private JMenuItem newFile, openFile, saveFile, importFile, exportFile, quit, about, faq;
+	private JCheckBoxMenuItem style, enableIME, fullscreen;
 
 	public FileBar(IME ime, Editor editor) {
-		file = new JMenu("File");
+		file = new JMenu("FILE");
 
-		newFile = new JMenuItem("New");
+		newFile = new JMenuItem("NEW");
 		newFile.addActionListener(e -> editor.addBlankTab());
 		newFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK, false));
 		file.add(newFile);
 
-		openFile = new JMenuItem("Open");
+		openFile = new JMenuItem("OPEN");
 		openFile.addActionListener(e -> editor.addFilledTab("opened", FileDialog.openFile()));
 		openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK, false));
 		file.add(openFile);
 
-		saveFile = new JMenuItem("Save");
+		saveFile = new JMenuItem("SAVE");
 		saveFile.addActionListener(e -> {
 			EditorTab tab;
 
@@ -60,11 +59,26 @@ public class FileBar extends JMenuBar {
 
 		file.add(new JSeparator());
 
-		quit = new JMenuItem("Quit");
+		importFile = new JMenuItem("IMPORT");
+		importFile.setEnabled(false);
+		importFile.addActionListener(e -> editor.addFilledTab("opened", FileDialog.openFile()));
+		importFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, KeyEvent.CTRL_DOWN_MASK, false));
+		file.add(importFile);
+
+		exportFile = new JMenuItem("EXPORT");
+		exportFile.setEnabled(false);
+		exportFile.addActionListener(e -> editor.addFilledTab("opened", FileDialog.openFile()));
+		exportFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK, false));
+		file.add(exportFile);
+
+		file.add(new JSeparator());
+
+		quit = new JMenuItem("QUIT");
 		quit.addActionListener(e -> {
 			Toolkit.getDefaultToolkit().beep();
 			int choice = JOptionPane.showConfirmDialog(null, "You have unsaved documents. Save changes?", "",
 				JOptionPane.YES_NO_CANCEL_OPTION);
+
 			switch (choice) {
 				case JOptionPane.YES_OPTION:
 					for (EditorTab tab : editor.getAllTabs())
@@ -84,19 +98,20 @@ public class FileBar extends JMenuBar {
 
 		add(file);
 
-		edit = new JMenu("Edit");
+		edit = new JMenu("EDIT");
 		add(edit);
 
-		view = new JMenu("View");
+		view = new JMenu("VIEW");
 
-		fullscreen = new JCheckBoxMenuItem("Fullscreen");
+		fullscreen = new JCheckBoxMenuItem("FULLSCREEN");
 		fullscreen.addItemListener(e -> ime.toggleFullscreen(fullscreen.isSelected()));
 		fullscreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0, false));
 		view.add(fullscreen);
 
-		show = new JMenu("Show View");
+		show = new JMenu("SHOW VIEW");
 
-		style = new JCheckBoxMenuItem("Style");
+		style = new JCheckBoxMenuItem("STYLE");
+		style.setEnabled(false);
 		style.addActionListener(e -> editor.getStyleMenu().showDialog(style.isSelected()));
 		style.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_DOWN_MASK, false));
 		show.add(style);
@@ -105,16 +120,35 @@ public class FileBar extends JMenuBar {
 
 		add(view);
 
-		options = new JMenu("Options");
+		options = new JMenu("OPTIONS");
 
 		options.add(new LanguageMenu(editor));
 
-		useIME = new JCheckBoxMenuItem("Use IME");
-		useIME.addActionListener(e -> editor.getCurrentTab().enableIME(useIME.isSelected()));
-		useIME.setSelected(true);
-		useIME.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0, false));
-		options.add(useIME);
+		enableIME = new JCheckBoxMenuItem("ENABLE IME");
+		enableIME.addActionListener(e -> {
+			if (editor.getCurrentTab() != null)
+				editor.getCurrentTab().enableIME(enableIME.isSelected());
+		});
+		enableIME.setSelected(true);
+		enableIME.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0, false));
+		options.add(enableIME);
 
 		add(options);
+
+		help = new JMenu("HELP");
+
+		about = new JMenuItem("ABOUT");
+		about.setEnabled(false);
+		help.add(about);
+
+		faq = new JMenuItem("FAQ");
+		faq.setEnabled(false);
+		help.add(faq);
+
+		add(help);
+	}
+
+	public void setEnableIMESelected(boolean selected) {
+		enableIME.setSelected(selected);
 	}
 }

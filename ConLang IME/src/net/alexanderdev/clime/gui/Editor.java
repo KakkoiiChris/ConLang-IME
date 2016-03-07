@@ -13,10 +13,14 @@ package net.alexanderdev.clime.gui;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -40,25 +44,33 @@ public class Editor extends JTabbedPane {
 
 	private StatusBar statusBar;
 
+	private BufferedImage bg;
+
 	public Editor(IME ime, StatusBar statusBar) {
-		super(SwingConstants.TOP, SCROLL_TAB_LAYOUT);
+		super(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 
 		setPreferredSize(new Dimension(800, 600));
 
-		addBlankTab();
-
 		this.ime = ime;
 		this.statusBar = statusBar;
+
+		try {
+			bg = ImageIO.read(getClass().getResourceAsStream("/img/tabBG.png"));
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void update(String text, boolean useIME) {
-		statusBar.update(text, useIME);
+	public void update(String text, boolean imeEnabled) {
+		statusBar.update(text, getCurrentTab().getLangName(), imeEnabled);
 	}
 
 	public EditorTab getCurrentTab() {
 		try {
 			return (EditorTab) ((CloseButtonTab) getTabComponentAt(getSelectedIndex())).getComponent();
-		} catch (IndexOutOfBoundsException e) {
+		}
+		catch (IndexOutOfBoundsException e) {
 			return null;
 		}
 	}
@@ -93,7 +105,7 @@ public class Editor extends JTabbedPane {
 	}
 
 	public void addBlankTab() {
-		addTab("untitled", new EditorTab(this));
+		addTab("untitled*", new EditorTab(this));
 	}
 
 	public void addFilledTab(String title, String[] text) {
@@ -104,8 +116,19 @@ public class Editor extends JTabbedPane {
 		return styleMenu;
 	}
 
+	public IME getIME() {
+		return ime;
+	}
+
 	public JFrame getFrame() {
 		return ime;
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
 	}
 
 	private class CloseButtonTab extends JPanel {
@@ -127,6 +150,7 @@ public class Editor extends JTabbedPane {
 			button.setRolloverIcon(new ImageIcon(getClass().getResource("/img/closeR.png")));
 			button.setPressedIcon(new ImageIcon(getClass().getResource("/img/closeP.png")));
 			button.setMargin(new Insets(0, 0, 0, 0));
+			button.setBackground(null);
 			button.addActionListener(e -> pane.remove(tab.getParent().getParent()));
 			add(button);
 		}

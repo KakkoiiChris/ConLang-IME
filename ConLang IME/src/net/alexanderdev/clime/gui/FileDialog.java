@@ -28,7 +28,8 @@ public class FileDialog {
 
 		try {
 			return FileIO.readFile(chooser.getSelectedFile());
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			return new String[] {
 				"ERROR!"
 			};
@@ -42,7 +43,8 @@ public class FileDialog {
 
 		try {
 			FileIO.writeFile(chooser.getSelectedFile(), text);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 		}
 	}
 }

@@ -17,15 +17,36 @@ import java.io.File;
  * @since Aug 15, 2015, 2:23:28 AM
  */
 public class FileSystem {
-	public static final File MAIN_DIR = new File("C:\\ConLang IME");
-	public static final File LANGS = new File(MAIN_DIR.getPath() + "\\langs");
+	private static File mainDir;
+	private static File langs;
+	private static File docs;
 
 	public static void init() {
-		if (!LANGS.exists())
-			System.out.println("Languages Directory Created: " + LANGS.mkdirs());
+		String os = System.getProperty("os.name").toLowerCase();
+
+		if (os.contains("win")) {
+			mainDir = new File(System.getenv("APPDATA") + File.separator + "ConLang IME");
+		}
+		else if (os.contains("mac")) {
+			mainDir = new File(System.getProperty("user.home") + "/Library/Application Support");
+		}
+
+		langs = new File(mainDir.getPath() + File.separator + "langs");
+
+		if (!langs.exists())
+			System.out.println("Languages Directory Created: " + langs.mkdirs());
+
+		docs = new File(System.getProperty("user.home") + File.separator + "Documents");
 	}
-	
+
+	public static File getLangs() {
+		return langs;
+	}
+
+	public static File getDocs() {
+		return docs;
+	}
+
 	public static void initPortable() {
-		
 	}
 }

@@ -37,13 +37,13 @@ import javax.swing.JPanel;
 public class StyleDialog extends JDialog {
 	private static final long serialVersionUID = -6100716103624014402L;
 
-	public static final int NONE = 0x00;
-	public static final int BOLD = 0x01;
+	public static final int NONE   = 0x00;
+	public static final int BOLD   = 0x01;
 	public static final int ITALIC = 0x02;
-	public static final int UNDER = 0x04;
+	public static final int UNDER  = 0x04;
 	public static final int STRIKE = 0x08;
-	public static final int SUB = 0x10;
-	public static final int SUPER = 0x20;
+	public static final int SUB    = 0x10;
+	public static final int SUPER  = 0x20;
 
 	private Editor editor;
 
@@ -142,15 +142,16 @@ public class StyleDialog extends JDialog {
 			}
 		};
 
-		BufferedImage palette = null;
+		BufferedImage palette  = null;
 		BufferedImage paletteR = null;
 		BufferedImage paletteP = null;
 
 		try {
-			palette = ImageIO.read(getClass().getResourceAsStream("/img/palette.png"));
+			palette  = ImageIO.read(getClass().getResourceAsStream("/img/palette.png"));
 			paletteR = ImageIO.read(getClass().getResourceAsStream("/img/paletteR.png"));
 			paletteP = ImageIO.read(getClass().getResourceAsStream("/img/paletteP.png"));
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 

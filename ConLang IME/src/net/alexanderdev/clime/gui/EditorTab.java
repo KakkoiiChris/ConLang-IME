@@ -10,7 +10,12 @@
  ****************************************************************/
 package net.alexanderdev.clime.gui;
 
-import static net.alexanderdev.clime.gui.StyleDialog.*;
+import static net.alexanderdev.clime.gui.StyleDialog.BOLD;
+import static net.alexanderdev.clime.gui.StyleDialog.ITALIC;
+import static net.alexanderdev.clime.gui.StyleDialog.STRIKE;
+import static net.alexanderdev.clime.gui.StyleDialog.SUB;
+import static net.alexanderdev.clime.gui.StyleDialog.SUPER;
+import static net.alexanderdev.clime.gui.StyleDialog.UNDER;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -35,14 +40,14 @@ import net.alexanderdev.clime.util.Language;
 public class EditorTab extends JTextPane {
 	private static final long serialVersionUID = -5613025029571082598L;
 
-	public String langName;
+	private String langName;
 
 	private Map<String, String> langMap = new HashMap<>();
 	private Map<String, String> escapes = new HashMap<>();
 
 	private int replaceSize;
 
-	private boolean useIME = true;
+	private boolean imeEnabled = true;
 
 	private Editor editor;
 
@@ -57,12 +62,12 @@ public class EditorTab extends JTextPane {
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				editor.update(getText(), useIME);
+				editor.update(getText(), imeEnabled);
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (useIME)
+				if (imeEnabled)
 					if (isPrintable(e.getKeyCode()))
 						replace();
 			}
@@ -91,6 +96,7 @@ public class EditorTab extends JTextPane {
 			|| keycode == KeyEvent.VK_END || keycode == KeyEvent.VK_PAGE_UP || keycode == KeyEvent.VK_PAGE_DOWN);
 	}
 
+	@SuppressWarnings("unused")
 	private boolean modified(KeyEvent e) {
 		return e.isControlDown() || e.isAltDown() || e.isAltGraphDown() || e.isMetaDown() || e.isShiftDown();
 	}
@@ -139,7 +145,22 @@ public class EditorTab extends JTextPane {
 		doc.setCharacterAttributes(start, end - start, style, false);
 	}
 
+	public String getLangName() {
+		return langName;
+	}
+
 	public void setLanguage(Language language) {
+		if (language == null) {
+			this.langName = "NONE";
+			enableIME(false);
+			((FileBar) editor.getIME().getJMenuBar()).setEnableIMESelected(false);
+			return;
+		}
+		else {
+			enableIME(true);
+			((FileBar) editor.getIME().getJMenuBar()).setEnableIMESelected(true);
+		}
+
 		this.langName = language.getName();
 		this.langMap = language.getLangMap();
 		this.escapes = language.getEscapes();
@@ -150,8 +171,8 @@ public class EditorTab extends JTextPane {
 	}
 
 	public void enableIME(boolean enable) {
-		useIME = enable;
-		editor.update(getText(), useIME);
+		imeEnabled = enable;
+		editor.update(getText(), imeEnabled);
 	}
 
 	private void replace() {
@@ -174,7 +195,8 @@ public class EditorTab extends JTextPane {
 
 					return;
 				}
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 			}
 		}
 
@@ -195,7 +217,8 @@ public class EditorTab extends JTextPane {
 
 					return;
 				}
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 			}
 		}
 	}

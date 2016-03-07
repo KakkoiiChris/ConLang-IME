@@ -19,20 +19,21 @@ import javax.swing.JLabel;
 public class StatusBar extends JLabel {
 	private static final long serialVersionUID = 6030444605679916180L;
 
-	private static final String DISPLAY = "CHARACTERS: %s  |  WORDS: %s  |  PARAGRAPHS: %s  |  IME Enabled: %b";
+	private static final String DISPLAY = "CHARACTERS: %s  |  WORDS: %s  |  PARAGRAPHS: %s  |  LANGUAGE: %s  |  IME ENABLED: %s";
 
 	public StatusBar() {
-		super(String.format(DISPLAY, 0, 0, 0, true));
+		super(String.format(DISPLAY, 0, 0, 0, "NONE", "YES"));
+		setOpaque(true);
 	}
 
-	public void update(String text, boolean useIME) {
+	public void update(String text, String langName, boolean imeEnabled) {
 		int chars = text.replace("\n", "").length();
-		int words = text.replace("\n", "").split(" ").length;
+		int words = text.split("\\s+").length;
 		int paras = text.split("\n").length;
 
 		if (text.length() == 0)
 			chars = words = paras = 0;
 
-		setText(String.format(DISPLAY, chars, words, paras, useIME));
+		setText(String.format(DISPLAY, chars, words, paras, langName, imeEnabled ? "YES" : "NO"));
 	}
 }

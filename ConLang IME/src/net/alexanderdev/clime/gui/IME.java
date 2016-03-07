@@ -29,14 +29,13 @@ public class IME extends JFrame {
 	private static final long serialVersionUID = 6961165635772608059L;
 
 	public static final String TITLE = "ConLang IME";
-	public static final String VERSION = "v1.2 alpha";
+	public static final String VERSION = "v1.9 alpha";
 
 	private FileBar fileBar;
 	private Editor editor;
 	private StatusBar statusBar;
 
 	private Dimension previousSize;
-
 	private Point previousLocation;
 
 	public IME() {
@@ -64,7 +63,8 @@ public class IME extends JFrame {
 
 		try {
 			icon = ImageIO.read(getClass().getResourceAsStream("/img/icon.png"));
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -85,7 +85,8 @@ public class IME extends JFrame {
 			dispose();
 			setExtendedState(JFrame.MAXIMIZED_BOTH);
 			setUndecorated(true);
-		} else {
+		}
+		else {
 			dispose();
 			setExtendedState(JFrame.NORMAL);
 			setUndecorated(false);
