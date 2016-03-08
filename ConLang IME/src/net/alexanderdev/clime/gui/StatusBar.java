@@ -26,10 +26,9 @@ public class StatusBar extends JLabel {
 		setOpaque(true);
 	}
 
-	public void update(String text, String langName, boolean imeEnabled) {
+	public void update(String text, int paras, String langName, boolean imeEnabled) {
 		int chars = text.replace("\n", "").length();
 		int words = text.split("\\s+").length;
-		int paras = text.split("\n").length;
 
 		if (text.length() == 0)
 			chars = words = paras = 0;

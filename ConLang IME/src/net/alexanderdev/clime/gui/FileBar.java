@@ -30,9 +30,9 @@ import net.alexanderdev.clime.gui.lang.LanguageMenu;
 public class FileBar extends JMenuBar {
 	private static final long serialVersionUID = -7517657275793776841L;
 
-	private JMenu file, edit, view, options, help, show;
+	private JMenu file, edit, view, options, help;
 	private JMenuItem newFile, openFile, saveFile, importFile, exportFile, quit, about, faq;
-	private JCheckBoxMenuItem style, enableIME, fullscreen;
+	private JCheckBoxMenuItem enableIME, fullscreen, showStyle, showStatusBar;
 
 	public FileBar(IME ime, Editor editor) {
 		file = new JMenu("FILE");
@@ -76,14 +76,14 @@ public class FileBar extends JMenuBar {
 		quit = new JMenuItem("QUIT");
 		quit.addActionListener(e -> {
 			Toolkit.getDefaultToolkit().beep();
-			int choice = JOptionPane.showConfirmDialog(null, "You have unsaved documents. Save changes?", "",
+
+			int choice = JOptionPane.showConfirmDialog(null, "Save unsaved changes?", "",
 				JOptionPane.YES_NO_CANCEL_OPTION);
 
 			switch (choice) {
 				case JOptionPane.YES_OPTION:
 					for (EditorTab tab : editor.getAllTabs())
 						FileDialog.saveFile(tab.getText());
-
 					System.exit(0);
 					break;
 				case JOptionPane.NO_OPTION:
@@ -103,20 +103,23 @@ public class FileBar extends JMenuBar {
 
 		view = new JMenu("VIEW");
 
+		showStyle = new JCheckBoxMenuItem("STYLE TOOLS");
+		showStyle.setEnabled(false);
+		//showStyle.setSelected(true);
+		showStyle.addItemListener(e -> ime.toggleStyle(showStyle.isSelected()));
+		showStyle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F19, 0, false));
+		view.add(showStyle);
+
+		showStatusBar = new JCheckBoxMenuItem("STATUS BAR");
+		showStatusBar.setSelected(true);
+		showStatusBar.addItemListener(e -> ime.toggleStatusBar(showStatusBar.isSelected()));
+		showStatusBar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0, false));
+		view.add(showStatusBar);
+
 		fullscreen = new JCheckBoxMenuItem("FULLSCREEN");
 		fullscreen.addItemListener(e -> ime.toggleFullscreen(fullscreen.isSelected()));
 		fullscreen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0, false));
 		view.add(fullscreen);
-
-		show = new JMenu("SHOW VIEW");
-
-		style = new JCheckBoxMenuItem("STYLE");
-		style.setEnabled(false);
-		style.addActionListener(e -> editor.getStyleMenu().showDialog(style.isSelected()));
-		style.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_DOWN_MASK, false));
-		show.add(style);
-
-		view.add(show);
 
 		add(view);
 

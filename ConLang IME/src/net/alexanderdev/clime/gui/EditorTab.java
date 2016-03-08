@@ -18,7 +18,6 @@ import static net.alexanderdev.clime.gui.StyleDialog.SUPER;
 import static net.alexanderdev.clime.gui.StyleDialog.UNDER;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -84,34 +83,21 @@ public class EditorTab extends JTextPane {
 	}
 
 	private boolean isPrintable(int keycode) {
-		return !(keycode == KeyEvent.VK_LEFT || keycode == KeyEvent.VK_RIGHT || keycode == KeyEvent.VK_UP
-			|| keycode == KeyEvent.VK_DOWN || keycode == KeyEvent.VK_ENTER || keycode == KeyEvent.VK_TAB
-			|| keycode == KeyEvent.VK_CAPS_LOCK || keycode == KeyEvent.VK_DELETE || keycode == KeyEvent.VK_BACK_SPACE
-			|| keycode == KeyEvent.VK_ENTER || keycode == KeyEvent.VK_SHIFT || keycode == KeyEvent.VK_CONTROL
-			|| keycode == KeyEvent.VK_ALT || keycode == KeyEvent.VK_ALT_GRAPH || keycode == KeyEvent.VK_F1
-			|| keycode == KeyEvent.VK_F2 || keycode == KeyEvent.VK_F3 || keycode == KeyEvent.VK_F4
-			|| keycode == KeyEvent.VK_F5 || keycode == KeyEvent.VK_F6 || keycode == KeyEvent.VK_F7
-			|| keycode == KeyEvent.VK_F8 || keycode == KeyEvent.VK_F9 || keycode == KeyEvent.VK_F10
-			|| keycode == KeyEvent.VK_F11 || keycode == KeyEvent.VK_F12 || keycode == KeyEvent.VK_HOME
-			|| keycode == KeyEvent.VK_END || keycode == KeyEvent.VK_PAGE_UP || keycode == KeyEvent.VK_PAGE_DOWN);
+		return !(keycode == KeyEvent.VK_LEFT      || keycode == KeyEvent.VK_RIGHT     || keycode == KeyEvent.VK_UP
+			  || keycode == KeyEvent.VK_DOWN      || keycode == KeyEvent.VK_ENTER     || keycode == KeyEvent.VK_TAB
+			  || keycode == KeyEvent.VK_CAPS_LOCK || keycode == KeyEvent.VK_DELETE    || keycode == KeyEvent.VK_BACK_SPACE
+			  || keycode == KeyEvent.VK_ENTER     || keycode == KeyEvent.VK_SHIFT     || keycode == KeyEvent.VK_CONTROL
+			  || keycode == KeyEvent.VK_ALT       || keycode == KeyEvent.VK_ALT_GRAPH || keycode == KeyEvent.VK_F1
+			  || keycode == KeyEvent.VK_F2        || keycode == KeyEvent.VK_F3        || keycode == KeyEvent.VK_F4
+			  || keycode == KeyEvent.VK_F5        || keycode == KeyEvent.VK_F6        || keycode == KeyEvent.VK_F7
+			  || keycode == KeyEvent.VK_F8        || keycode == KeyEvent.VK_F9        || keycode == KeyEvent.VK_F10
+			  || keycode == KeyEvent.VK_F11       || keycode == KeyEvent.VK_F12       || keycode == KeyEvent.VK_HOME
+			  || keycode == KeyEvent.VK_END       || keycode == KeyEvent.VK_PAGE_UP   || keycode == KeyEvent.VK_PAGE_DOWN);
 	}
 
 	@SuppressWarnings("unused")
 	private boolean modified(KeyEvent e) {
 		return e.isControlDown() || e.isAltDown() || e.isAltGraphDown() || e.isMetaDown() || e.isShiftDown();
-	}
-
-	@Override
-	public boolean getScrollableTracksViewportWidth() {
-		return (getSize().width < getParent().getSize().width);
-	}
-
-	@Override
-	public void setSize(Dimension d) {
-		if (d.width < getParent().getSize().width)
-			d.width = getParent().getSize().width;
-
-		super.setSize(d);
 	}
 
 	public void applyStyle(String font, int size, Color color, int styles) {
@@ -125,22 +111,22 @@ public class EditorTab extends JTextPane {
 
 		if (start > end) {
 			int life = start;
-			start = end;
-			end = life;
+			start    = end;
+			end      = life;
 		}
 
 		Style style = addStyle("MyHilite", null);
 
 		StyleConstants.setFontFamily(style, font);
-		StyleConstants.setFontSize(style, size);
+		StyleConstants.setFontSize  (style, size);
 		StyleConstants.setForeground(style, color);
 
-		StyleConstants.setBold(style, (styles & BOLD) == BOLD);
-		StyleConstants.setItalic(style, (styles & ITALIC) == ITALIC);
-		StyleConstants.setUnderline(style, (styles & UNDER) == UNDER);
+		StyleConstants.setBold         (style, (styles & BOLD)   == BOLD);
+		StyleConstants.setItalic       (style, (styles & ITALIC) == ITALIC);
+		StyleConstants.setUnderline    (style, (styles & UNDER)  == UNDER);
 		StyleConstants.setStrikeThrough(style, (styles & STRIKE) == STRIKE);
-		StyleConstants.setSubscript(style, (styles & SUB) == SUB);
-		StyleConstants.setSuperscript(style, (styles & SUPER) == SUPER);
+		StyleConstants.setSubscript    (style, (styles & SUB)    == SUB);
+		StyleConstants.setSuperscript  (style, (styles & SUPER)  == SUPER);
 
 		doc.setCharacterAttributes(start, end - start, style, false);
 	}
@@ -161,9 +147,9 @@ public class EditorTab extends JTextPane {
 			((FileBar) editor.getIME().getJMenuBar()).setEnableIMESelected(true);
 		}
 
-		this.langName = language.getName();
-		this.langMap = language.getLangMap();
-		this.escapes = language.getEscapes();
+		this.langName    = language.getName();
+		this.langMap     = language.getLangMap();
+		this.escapes     = language.getEscapes();
 		this.replaceSize = language.getReplaceSize();
 
 		Font f = getFont();
@@ -180,7 +166,7 @@ public class EditorTab extends JTextPane {
 
 		for (int j = 2; j <= replaceSize + 1; j++) {
 			int prevCaretPos = getCaretPosition();
-			int prevTextLen = text.length();
+			int prevTextLen  = text.length();
 
 			try {
 				String seq = text.substring(prevCaretPos - j, prevCaretPos);
@@ -200,9 +186,9 @@ public class EditorTab extends JTextPane {
 			}
 		}
 
-		for (int j = 1; j <= replaceSize; j++) {
+		for (int j = replaceSize; j >= 1; j--) {
 			int prevCaretPos = getCaretPosition();
-			int prevTextLen = text.length();
+			int prevTextLen  = text.length();
 
 			try {
 				String seq = text.substring(prevCaretPos - j, prevCaretPos);

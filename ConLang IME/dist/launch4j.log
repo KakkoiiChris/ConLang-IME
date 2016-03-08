@@ -1,0 +1,27 @@
+
+
+Version:	3.8
+CmdLine:	C:\Users\Owner\Documents\GitHub\ConLang-IME\ConLang IME\dist\ConLang IME.exe --l4j-debug
+WOW64:		yes
+Working dir:	C:\Users\Owner\Documents\GitHub\ConLang-IME\ConLang IME\dist\.
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8
+Ignore:		1.8
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_66
+Check launcher:	C:\Program Files\Java\jre1.8.0_66\bin\javaw.exe (OK)
+Match:		1.8.0_66
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_74
+Check launcher:	C:\Program Files\Java\jre1.8.0_74\bin\javaw.exe (OK)
+Match:		1.8.0_74
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+Check:		SOFTWARE\JavaSoft\Java Development Kit\1.8
+Ignore:		1.8
+Check:		SOFTWARE\JavaSoft\Java Development Kit\1.8.0_66
+Ignore:		1.8.0_66
+Check:		SOFTWARE\JavaSoft\Java Development Kit\1.8.0_72
+Ignore:		1.8.0_72
+Runtime used:	1.8.0_74 (64-bit)
+Launcher:	C:\Program Files\Java\jre1.8.0_74\bin\javaw.exe
+Launcher args:	-jar "C:\Users\Owner\Documents\GitHub\ConLang-IME\ConLang IME\dist\ConLang IME.exe"
+Args length:	83/32768 chars
+Exit code:	0

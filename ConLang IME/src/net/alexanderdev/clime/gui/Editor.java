@@ -30,6 +30,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Utilities;
 
 /**
  * @author Christian Bryce Alexander
@@ -37,8 +39,6 @@ import javax.swing.SwingConstants;
  */
 public class Editor extends JTabbedPane {
 	private static final long serialVersionUID = -6729183148285169768L;
-
-	private StyleDialog styleMenu = new StyleDialog(this);
 
 	private IME ime;
 
@@ -49,7 +49,7 @@ public class Editor extends JTabbedPane {
 	public Editor(IME ime, StatusBar statusBar) {
 		super(SwingConstants.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 
-		setPreferredSize(new Dimension(800, 600));
+		setPreferredSize(new Dimension(640,480));
 
 		this.ime = ime;
 		this.statusBar = statusBar;
@@ -63,7 +63,23 @@ public class Editor extends JTabbedPane {
 	}
 
 	public void update(String text, boolean imeEnabled) {
-		statusBar.update(text, getCurrentTab().getLangName(), imeEnabled);
+		int totalCharacters = getCurrentTab().getDocument().getLength();
+		
+		int lineCount = (totalCharacters == 0) ? 1 : 0;
+
+		try {
+			int offset = totalCharacters;
+			
+			while (offset > 0) {
+				offset = Utilities.getRowStart(getCurrentTab(), offset) - 1;
+				lineCount++;
+			}
+		}
+		catch (BadLocationException e) {
+			e.printStackTrace();
+		}
+
+		statusBar.update(text, lineCount, getCurrentTab().getLangName(), imeEnabled);
 	}
 
 	public EditorTab getCurrentTab() {
@@ -87,8 +103,8 @@ public class Editor extends JTabbedPane {
 	@Override
 	public void addTab(String title, Icon icon, Component component, String tip) {
 		JScrollPane scroll = new JScrollPane(component);
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		super.addTab(title, icon, scroll, tip);
 		setTabComponentAt(getTabCount() - 1, new CloseButtonTab(component, this, title, icon));
@@ -105,15 +121,11 @@ public class Editor extends JTabbedPane {
 	}
 
 	public void addBlankTab() {
-		addTab("untitled*", new EditorTab(this));
+		addTab("UNTITLED *", new EditorTab(this));
 	}
 
 	public void addFilledTab(String title, String[] text) {
 		addTab(title, new EditorTab(text));
-	}
-
-	public StyleDialog getStyleMenu() {
-		return styleMenu;
 	}
 
 	public IME getIME() {
@@ -127,7 +139,7 @@ public class Editor extends JTabbedPane {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+
 		g.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
 	}
 

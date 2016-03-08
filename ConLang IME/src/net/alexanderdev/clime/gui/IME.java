@@ -29,9 +29,10 @@ public class IME extends JFrame {
 	private static final long serialVersionUID = 6961165635772608059L;
 
 	public static final String TITLE = "ConLang IME";
-	public static final String VERSION = "v1.9 alpha";
+	public static final String VERSION = "v1.9.1 alpha";
 
 	private FileBar fileBar;
+	private StyleToolBar styleToolBar;
 	private Editor editor;
 	private StatusBar statusBar;
 
@@ -48,6 +49,9 @@ public class IME extends JFrame {
 
 		editor = new Editor(this, statusBar);
 		add(editor, BorderLayout.CENTER);
+
+		//styleToolBar = new StyleToolBar(editor);
+		//add(styleToolBar, BorderLayout.NORTH);
 
 		fileBar = new FileBar(this, editor);
 		setJMenuBar(fileBar);
@@ -76,6 +80,14 @@ public class IME extends JFrame {
 		setVisible(true);
 
 		setMinimumSize(new Dimension(getWidth(), getHeight()));
+	}
+
+	public void toggleStyle(boolean selected) {
+		styleToolBar.setVisible(selected);
+	}
+
+	public void toggleStatusBar(boolean selected) {
+		statusBar.setVisible(selected);
 	}
 
 	public void toggleFullscreen(boolean selected) {

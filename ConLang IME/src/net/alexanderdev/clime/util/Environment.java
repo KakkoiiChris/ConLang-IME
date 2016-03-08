@@ -32,9 +32,9 @@ public class Environment {
 	static {
 		graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
-		graphicsDevices     = graphicsEnvironment.getScreenDevices();
+		graphicsDevices = graphicsEnvironment.getScreenDevices();
 
-		defaultDisplayMode  = graphicsEnvironment.getDefaultScreenDevice().getDisplayMode();
+		defaultDisplayMode = graphicsEnvironment.getDefaultScreenDevice().getDisplayMode();
 	}
 
 	/**
@@ -123,5 +123,9 @@ public class Environment {
 
 	public static Font[] getAllFonts() {
 		return graphicsEnvironment.getAllFonts();
+	}
+
+	public static String[] getAllFontNames() {
+		return graphicsEnvironment.getAvailableFontFamilyNames();
 	}
 }
